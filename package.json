@@ -27,8 +27,8 @@
   "dependencies": {},
   "devDependencies": {
     "angular2": "2.0.0-alpha.45",
+    "del": "^2.0.2",
     "gulp": "3.9.0",
-    "gulp-clean": "0.3.1",
     "gulp-eslint": "1.0.0",
     "gulp-karma": "0.0.5",
     "gulp-tslint": "3.5.0",

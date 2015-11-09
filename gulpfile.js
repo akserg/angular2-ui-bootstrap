@@ -1,5 +1,6 @@
 var gulp = require('gulp');
-var clean = require('gulp-clean');
+// var clean = require('gulp-clean');
+var del = require('del');
 var esLint = require('gulp-eslint');
 var tslint = require('gulp-tslint');
 
@@ -23,9 +24,12 @@ gulp.paths = {
 // ------------------
 // Clean dist forlder
 // ------------------
-gulp.task('clean', function () {
-	return gulp.src('dist', {read: false})
-    	.pipe(clean());
+gulp.task('clean', function (cb) {
+	// return gulp.src('dist', {read: false})
+  //   	.pipe(clean());
+  del([
+    'dist'
+  ], cb);
 });
 
 // ----------
