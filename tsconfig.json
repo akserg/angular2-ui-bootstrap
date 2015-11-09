@@ -1,0 +1,23 @@
+{
+  "version": "1.6.2",
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": true,
+    "declaration": true,
+    "removeComments": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "listFiles": false,
+    "noLib": false
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "./angular2-ui-bootstrap.ts",
+    "./tsd.d.ts",
+    "./src/effects/show-hide-effect.ts"
+  ]
+}
