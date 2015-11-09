@@ -2,7 +2,9 @@
   "name": "angular2-ui-bootstrap",
   "version": "0.1.2",
   "description": "Angular 2 Components for Bootstrap",
-  "scripts": {},
+  "scripts": {
+    "test": "gulp test.all.js"
+  },
   "main": "angular2-ui-bootstrap.js",
   "typings": "angular2-ui-bootstrap.d.ts",
   "keywords": [
@@ -22,13 +24,19 @@
     "url": "https://github.com/akserg/angular2-ui-bootstrap/issues"
   },
   "homepage": "https://github.com/akserg/angular2-ui-bootstrap#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "angular2": "2.0.0-alpha.45",
     "gulp": "3.9.0",
     "gulp-clean": "0.3.1",
     "gulp-eslint": "1.0.0",
-    "gulp-tslint": "3.5.0"
+    "gulp-karma": "0.0.5",
+    "gulp-tslint": "3.5.0",
+    "jasmine": "^2.3.2",
+    "karma": "^0.13.15",
+    "karma-coverage": "^0.5.3",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "phantomjs": "^1.9.18"
   }
 }
