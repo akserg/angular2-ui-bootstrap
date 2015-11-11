@@ -42,6 +42,7 @@
     "karma-sourcemap-loader": "^0.3.6",
     "merge2": "^0.3.6",
     "run-sequence": "^1.1.4",
+    "rx": "^4.0.6",
     "systemjs": "^0.19.5",
     "typescript": "^1.6.2",
     "webpack": "^1.12.3"
