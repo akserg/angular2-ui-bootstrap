@@ -103,8 +103,8 @@ gulp.task('test', function(done) {
   new karmaServer(config, done).start();
 });
 
-gulp.task('watch', ['clean:tests', 'build-tests'], function() { 
-	gulp.watch(PATHS.src, ['build-tests']); 
+gulp.task('watch', ['default'], function() { 
+	gulp.watch(PATHS.src, ['default']); 
 });
 
 // -----
@@ -113,7 +113,6 @@ gulp.task('watch', ['clean:tests', 'build-tests'], function() {
 
 gulp.task('build', function(done) {
   runSequence(
-//      'enforce-format', 
       'ddescribe-iit', 
       'clean:tests', 
       'build-tests', 
@@ -126,7 +125,6 @@ gulp.task('build', function(done) {
 
 gulp.task('default', function(done) {
   runSequence(
-//  	'enforce-format', 
   	'ddescribe-iit', 
   	'clean:tests', 
   	'build-tests', 
