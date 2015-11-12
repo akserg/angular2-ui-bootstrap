@@ -13,4 +13,8 @@ export class CssEffectTiming {
   static EASE_IN:CssEffectTiming = new CssEffectTiming('ease-in');
   static EASE_IN_OUT:CssEffectTiming = new CssEffectTiming('ease-in-out');
   static EASE_OUT:CssEffectTiming = new CssEffectTiming('ease-out');
+
+  static get defaultTiming():CssEffectTiming {
+    return CssEffectTiming.EASE;
+  }
 }
