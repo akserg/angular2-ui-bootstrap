@@ -1,7 +1,4 @@
-import {
-  describe,
-  expect
-} from 'angular2/testing';
+import {describe, expect} from 'angular2/testing';
 
 import {VisibleEffectManager} from './visible-effect-manager';
 
