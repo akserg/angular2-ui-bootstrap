@@ -102,9 +102,10 @@ export class VisibleEffectManager {
 
 	/**
 	 * Populate or create an visual state of an element.
+	 * privale
 	 */
-	private static populateState(element:HTMLElement):VisibleState {
-		let currentValues:VisibleValues = VisibleEffectManager.values[<any>element];
+	static populateState(element:HTMLElement):VisibleState {
+		let currentValues:VisibleValues = VisibleEffectManager.values.get(element);
 
 		if (currentValues) {
 			return currentValues.currentState;
@@ -121,15 +122,16 @@ export class VisibleEffectManager {
 		let computedDisplay:string = computedStyle.display;
 		let inferredState:VisibleState = computedDisplay === 'none' ? VisibleState.HIDDEN : VisibleState.SHOWN;
 
-		VisibleEffectManager.values[<any>element] = new VisibleValues(computedDisplay, localDisplay, inferredState);
+		VisibleEffectManager.values.set(element, new VisibleValues(computedDisplay, localDisplay, inferredState));
 
 		return inferredState;
 	}
 
 	/**
-	 * Chesk are action or state belong to toogle state.
+	 * Chesk is action or state belong to toogle state.
+	 * private
 	 */
-	private static getToggleState(action:VisibleAction, state:VisibleState):boolean {
+	static getToggleState(action:VisibleAction, state:VisibleState):boolean {
 		if (action === VisibleAction.SHOW) {
 			return true;
 		} if (action === VisibleAction.HIDE) {
@@ -137,7 +139,7 @@ export class VisibleEffectManager {
 		} if (action === VisibleAction.TOGGLE) {
 			if (state === VisibleState.HIDDEN || state === VisibleState.HIDING) {
 				return true;
-			} else if (state === VisibleState.HIDDEN || state === VisibleState.HIDING) {
+			} else if (state === VisibleState.SHOWN || state === VisibleState.SHOWING) {
 				return false;
 			} else {
 				throw new Error('Value of ' + state + ' is not supported');
@@ -149,8 +151,9 @@ export class VisibleEffectManager {
 
 	/**
 	 * Show or hide an element with animation effect.
+	 * private
 	 */
-	private static requestEffect(doShow:boolean, element:HTMLElement, desiredDuration:number,
+	static requestEffect(doShow:boolean, element:HTMLElement, desiredDuration:number,
 		effect:VisibleEffect, effectTiming:CssEffectTiming):Promise<VisibleResult> {
 
 		// Check the duration
@@ -175,15 +178,16 @@ export class VisibleEffectManager {
 
 	/**
 	 * Show an element with animation effect.
+	 * private
 	 */
-	private static requestShow(element:HTMLElement, desiredDuration:number, effect:VisibleEffect, effectTiming:CssEffectTiming):Promise<VisibleResult> {
+	static requestShow(element:HTMLElement, desiredDuration:number, effect:VisibleEffect, effectTiming:CssEffectTiming):Promise<VisibleResult> {
 
 		global.assert(element);
 		global.assert(desiredDuration);
 		global.assert(effect);
 		global.assert(effectTiming);
 
-		let values:VisibleValues = VisibleEffectManager.values[<any>element];
+		let values:VisibleValues = VisibleEffectManager.values.get(element);
 
 		let fractionComplete:number = null;
 
@@ -226,14 +230,20 @@ export class VisibleEffectManager {
 		}
 	}
 
+	/**
+	 * private
+	 */
 	static finishShow(element:HTMLElement):void {
-		let values:VisibleValues = VisibleEffectManager.values[<any>element];
+		let values:VisibleValues = VisibleEffectManager.values.get(element);
 		global.assert(!AnimatingValues.isAnimating(element));
 		element.style.display = VisibleEffectManager.getShowDisplayValue(element);
 		values.currentState = VisibleState.SHOWN;
 	}
 
-	private static requestHide(element:HTMLElement, desiredDuration:number,
+	/**
+	 * private
+	 */
+	static requestHide(element:HTMLElement, desiredDuration:number,
 		effect:VisibleEffect, effectTiming:CssEffectTiming):Promise<VisibleResult> {
 
 		global.assert(element);
@@ -280,7 +290,10 @@ export class VisibleEffectManager {
 		}
 	}
 
-	private static finishHide(element:HTMLElement):void {
+	/**
+	 * private
+	 */
+	static finishHide(element:HTMLElement):void {
 		let values:VisibleValues = VisibleEffectManager.values[<any>element];
 
 		global.assert(!AnimatingValues.isAnimating(element));
@@ -290,7 +303,10 @@ export class VisibleEffectManager {
 		values.currentState = VisibleState.HIDDEN;
 	}
 
-	private static getShowDisplayValue(element:HTMLElement):string {
+	/**
+	 * 
+	 */
+	static getShowDisplayValue(element:HTMLElement):string {
 		let values:VisibleValues = VisibleEffectManager.values[<any>element];
 
 		if (values.initialComputedDisplay === 'none') {
@@ -324,16 +340,16 @@ export class AnimatingValues {
 
   private timer:any;
 
-  constructor(private element:HTMLElement, private cleanupAction:Function, private finishFunc:Function) {
-    global.assert(AnimatingValues.animatingValues[<any>this.element]);
-    AnimatingValues.animatingValues[<any>this.element] = this;
+  constructor(private element:HTMLElement, private cleanupFunction:Function, private finishFunction:Function) {
+    global.assert(AnimatingValues.animatingValues.get(this.element));
+    AnimatingValues.animatingValues.set(this.element, this);
   }
 
   /**
    * Check does any animation happens on an element.
    */
   static isAnimating(element:HTMLElement):boolean {
-    let values:VisibleValues = AnimatingValues.animatingValues[<any>element];
+    let values:AnimatingValues = AnimatingValues.animatingValues.get(element);
     return values != null;
   }
 
@@ -341,7 +357,7 @@ export class AnimatingValues {
    * Cancel current animation on an element.
    */
   static cancelAnimation(element:HTMLElement):void {
-    let values:AnimatingValues = AnimatingValues.animatingValues[<any>element];
+    let values:AnimatingValues = AnimatingValues.animatingValues.get(element);
     global.assert(values);
     values.cancel();
   }
@@ -349,8 +365,8 @@ export class AnimatingValues {
   /**
    * Run clean up operation later.
    */
-  static scheduleCleanup(durationMS:number, element:HTMLElement, cleanupAction:Function, finishAction:Function):Promise<VisibleResult> {
-    let value:AnimatingValues = new AnimatingValues(element, cleanupAction, finishAction);
+  static scheduleCleanup(durationMS:number, element:HTMLElement, cleanupFunction:Function, finishFunction:Function):Promise<VisibleResult> {
+    let value:AnimatingValues = new AnimatingValues(element, cleanupFunction, finishFunction);
     return value.start(durationMS);
   }
 
@@ -361,7 +377,9 @@ export class AnimatingValues {
     global.assert(durationMS > 0);
     global.assert(this.timer);
 
-    this.timer = TimerWrapper.setTimeout(this.complete, durationMS);
+    this.timer = TimerWrapper.setTimeout(() => {
+		this.complete();
+	}, durationMS);
     return this.completer.promise;
   }
 
@@ -370,7 +388,8 @@ export class AnimatingValues {
    */
   private cancel():void {
     global.assert(this.timer);
-    this.timer.cancel();
+    TimerWrapper.clearTimeout(this.timer); 
+	this.timer = null;
     this.cleanup();
     this.completer.resolve(VisibleResult.CANCELED);
   }
@@ -380,7 +399,7 @@ export class AnimatingValues {
    */
   private complete():void {
     this.cleanup();
-    this.finishFunc(this.element);
+    this.finishFunction(this.element);
     this.completer.resolve(VisibleResult.ANIMATED);
   }
 
@@ -388,8 +407,8 @@ export class AnimatingValues {
    * Clean up after canceletion or completion of animation operation.
    */
   private cleanup():void {
-    global.assert(AnimatingValues.animatingValues[<any>this.element]);
-    this.cleanupAction(this.element);
-    AnimatingValues.animatingValues[<any>this.element] = null;
+    global.assert(AnimatingValues.animatingValues.get(this.element));
+    this.cleanupFunction(this.element);
+    AnimatingValues.animatingValues.set(this.element, null);
   }
 }
