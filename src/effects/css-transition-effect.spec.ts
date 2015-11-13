@@ -59,15 +59,12 @@ describe('CssTransitionEffect', () => {
       expect(element.style.transitionTimingFunction).not.toBe(cssTimingValue);
       expect(element.style.transitionProperty).not.toBe(property);
       expect(element.style.transitionDuration).not.toBe(desiredDuration + 'ms');
-      // expect(element.style.getPropertyValue(property)).not.toBe(propertyValue);
 
       tick(1);
 
       expect(element.style.transitionTimingFunction).toBe(cssTimingValue);
       expect(element.style.transitionProperty).toBe(property);
       expect(element.style.transitionDuration).toBe(desiredDuration + 'ms');
-      // expect(element.style.getPropertyValue(property)).not.toBe(propertyValue);
-
     })();
   });
 
@@ -80,15 +77,12 @@ describe('CssTransitionEffect', () => {
       expect(element.style.transitionTimingFunction).not.toBe(cssTimingValue);
       expect(element.style.transitionProperty).not.toBe(property);
       expect(element.style.transitionDuration).not.toBe(desiredDuration + 'ms');
-      // expect(element.style.getPropertyValue(property)).not.toBe(propertyValue);
 
       tick(1);
 
       expect(element.style.transitionTimingFunction).toBe(cssTimingValue);
       expect(element.style.transitionProperty).toBe(property);
       expect(element.style.transitionDuration).toBe(desiredDuration + 'ms');
-      // expect(element.style.getPropertyValue(property)).not.toBe(propertyValue);
-
     })();
   });
 
@@ -101,7 +95,6 @@ describe('CssTransitionEffect', () => {
       expect(element.style.transitionTimingFunction).toBe(cssTimingValue);
       expect(element.style.transitionProperty).toBe(property);
       expect(element.style.transitionDuration).toBe(desiredDuration + 'ms');
-      // expect(element.style.getPropertyValue(property)).not.toBe(propertyValue);
 
       cssTransitionEffect.clearAnimation(element);
 
@@ -110,9 +103,6 @@ describe('CssTransitionEffect', () => {
       expect(element.style.transitionTimingFunction).not.toBe(cssTimingValue);
       expect(element.style.transitionProperty).not.toBe(property);
       expect(element.style.transitionDuration).not.toBe(desiredDuration + 'ms');
-      // expect(element.style.getPropertyValue(property)).not.toBe(propertyValue);
-
-
     })();
   });
 });

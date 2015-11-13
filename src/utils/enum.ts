@@ -1,8 +1,8 @@
 export class Enum {
 
-  get value():String {
+  get value():string {
 	  return this._value;
   }
   
-  constructor(private _value:String){}
+  constructor(private _value:string){}
 }

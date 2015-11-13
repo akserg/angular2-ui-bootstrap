@@ -4,7 +4,7 @@ export class VisibleEvent {
 	static SHOWN:VisibleEvent = new VisibleEvent('shown');
 	static HIDDEN:VisibleEvent = new VisibleEvent('hidden');
 	
-	constructor(public type:String) {}
+	constructor(public type:string) {}
 }
 
 /**
