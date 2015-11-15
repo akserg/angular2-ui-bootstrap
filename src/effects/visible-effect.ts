@@ -29,6 +29,6 @@ export class VisibleEffect {
   static NoOpVisibleEffect:VisibleEffect = new VisibleEffect();
 
   static default(effect?:VisibleEffect):VisibleEffect {
-      return effect === undefined || effect === null ? VisibleEffect.NoOpVisibleEffect : effect;
+      return effect || VisibleEffect.NoOpVisibleEffect;
   }
 }

@@ -1,6 +1,9 @@
 import {describe, beforeEach, expect, it, fakeAsync, tick, flushMicrotasks} from 'angular2/testing';
 
 import {VisibleEffectManager, VisibleState, VisibleResult, VisibleAction, AnimatingValues} from './visible-effect-manager';
+import {VisibleEffect} from './visible-effect';
+import {CssTransitionEffect} from './css-transition-effect';
+import {CssEffectTiming} from './css-effect-timing';
 
 describe('AnimatingValues', () => {
   
@@ -90,7 +93,7 @@ describe('VisibleEffectManager', () => {
     expect(VisibleEffectManager.getState(element)).toBe(VisibleState.SHOWN);
   });
   
-  it('should check is action or state belong to toogle state.', () => {
+  it('should check is action or state belongs to toogled state.', () => {
     expect(VisibleEffectManager.getToggleState(VisibleAction.SHOW, VisibleState.SHOWN)).toBeTruthy();
     expect(VisibleEffectManager.getToggleState(VisibleAction.HIDE, VisibleState.SHOWN)).toBeFalsy();
     
@@ -111,5 +114,21 @@ describe('VisibleEffectManager', () => {
         VisibleEffectManager.getToggleState(new VisibleAction("rock"), new VisibleState('test'));
       })(); 
     }).toThrowError('Value of [object Object] is not supported');
+  });
+  
+  it('should ', () => {
+    fakeAsync(() => {
+      let property = 'max-height';
+      let timing:CssEffectTiming = CssEffectTiming.LINEAR;
+      // cssTimingValue = CssEffectTiming.getCssValue(timing);
+      // desiredDuration = 50;
+      // propertyValue = '';
+      // element = document.createElement('div');
+      var effect:VisibleEffect = new CssTransitionEffect(property, new Map<string, string>().set('overflow', 'hidden'));
+      let state:VisibleState = VisibleEffectManager.populateState(element);
+      VisibleEffectManager.requestShow(element, 1, effect, timing).then((result:VisibleResult) => {
+        expect(result).toBe(VisibleResult.NOOP);
+      });
+    })(); 
   });
 });
