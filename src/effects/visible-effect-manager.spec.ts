@@ -130,5 +130,8 @@ describe('VisibleEffectManager', () => {
         expect(result).toBe(VisibleResult.NOOP);
       });
     })(); 
+
+  it('should start animation after call the method begin', () => {
+    // VisibleEffectManager.begin
   });
 });
