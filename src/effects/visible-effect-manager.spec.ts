@@ -61,9 +61,13 @@ describe('AnimatingValues', () => {
 describe('VisibleEffectManager', () => {
 
   let element:HTMLElement;
+  let property:string;
+  var effect:VisibleEffect;
 
   beforeEach(() => {
     element = document.createElement('div');
+    property = 'max-height';
+    effect = new CssTransitionEffect(property, new Map<string, string>().set('overflow', 'hidden'));
   });
   
   it('should thrown an exception if element is undefined', () => {
@@ -116,22 +120,38 @@ describe('VisibleEffectManager', () => {
     }).toThrowError('Value of [object Object] is not supported');
   });
   
-  it('should ', () => {
+  it('should start animation after call the method hide', () => {
     fakeAsync(() => {
-      let property = 'max-height';
-      let timing:CssEffectTiming = CssEffectTiming.LINEAR;
-      // cssTimingValue = CssEffectTiming.getCssValue(timing);
-      // desiredDuration = 50;
-      // propertyValue = '';
-      // element = document.createElement('div');
-      var effect:VisibleEffect = new CssTransitionEffect(property, new Map<string, string>().set('overflow', 'hidden'));
-      let state:VisibleState = VisibleEffectManager.populateState(element);
-      VisibleEffectManager.requestShow(element, 1, effect, timing).then((result:VisibleResult) => {
-        expect(result).toBe(VisibleResult.NOOP);
+      VisibleEffectManager.hide(element, effect).then((result:VisibleResult) => {
+        expect(element.style.display).toBe('none');
+        expect(result).toBeDefined(VisibleResult.ANIMATED);
       });
+      tick(250);
     })(); 
-
-  it('should start animation after call the method begin', () => {
-    // VisibleEffectManager.begin
+  });
+  
+  it('should start animation after call the method show', () => {
+    fakeAsync(() => {
+      VisibleEffectManager.show(element, effect).then((result:VisibleResult) => {
+        expect(element.style.display).toBe('');
+        expect(result).toBeDefined(VisibleResult.ANIMATED);
+      });
+      tick(250);
+    })(); 
+  });
+  
+  it('should start animation after call the method toggle', () => {
+    fakeAsync(() => {
+      VisibleEffectManager.hide(element, effect).then((result:VisibleResult) => {
+        expect(element.style.display).toBe('none');
+        expect(result).toBeDefined(VisibleResult.ANIMATED);
+        VisibleEffectManager.toggle(element, effect).then((result:VisibleResult) => {
+          expect(element.style.display).toBe('');
+          expect(result).toBeDefined(VisibleResult.ANIMATED);
+        });
+        tick(250);
+      });
+      tick(250);
+    })(); 
   });
 });

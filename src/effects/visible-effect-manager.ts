@@ -53,7 +53,7 @@ class VisibleValues {
 @Injectable()
 export class VisibleEffectManager {
 
-	private static defaultDuration:number = 218;
+	private static defaultDuration:number = 250;
 	private static defaultDisplays:Map<string, string> = new Map<string, string>();
 	static values:WeakMap<HTMLElement, VisibleValues> = new WeakMap<HTMLElement, VisibleValues>();
 
@@ -157,7 +157,7 @@ export class VisibleEffectManager {
 		effect:VisibleEffect, effectTiming:CssEffectTiming):Promise<VisibleResult> {
 
 		// Check the duration
-		if (desiredDuration === null) {
+		if (!desiredDuration) {
 			desiredDuration = VisibleEffectManager.defaultDuration;
 		} else if (desiredDuration < 0) {
 			desiredDuration = 0;
@@ -165,7 +165,7 @@ export class VisibleEffectManager {
 		// Check the effect and return the default one if effect is not defined or null
 		effect = VisibleEffect.default(effect);
 		// Check timing
-		if (effectTiming === null) {
+		if (!effectTiming) {
 			effectTiming = CssEffectTiming.defaultTiming;
 		}
 
@@ -251,41 +251,45 @@ export class VisibleEffectManager {
 		global.assert(effect);
 		global.assert(effectTiming);
 
-		let values = VisibleEffectManager.values[<any>element];
-		let fractionComplete:number = null;
-
-		if (values.currentState === VisibleState.HIDING) {
-			// no op - let the current animation finish
-			global.assert(AnimatingValues.isAnimating(element));
-			return Promise.resolve(VisibleResult.NOOP); // new Future.value(ShowHideResult.NOOP);
-		} else if (values.currentState === VisibleState.HIDDEN) {
-			// it's possible we're here because the inferred calculated value is 'none'
-			// this hard-wires the local display value to 'none'...just to be clear
-			VisibleEffectManager.finishHide(element);
-			return Promise.resolve(VisibleResult.NOOP); // new Future.value(ShowHideResult.NOOP);
-		} else if (values.currentState === VisibleState.SHOWING) {
-			fractionComplete = effect.computeFractionComplete(element);
-			AnimatingValues.cancelAnimation(element);
-		} else if (values.currentState === VisibleState.SHOWN) {
-			// handeled below with a fall-through
+		let values = VisibleEffectManager.values.get(element);
+		if (values) {
+			let fractionComplete:number = null;
+	
+			if (values.currentState === VisibleState.HIDING) {
+				// no op - let the current animation finish
+				global.assert(AnimatingValues.isAnimating(element));
+				return Promise.resolve(VisibleResult.NOOP);
+			} else if (values.currentState === VisibleState.HIDDEN) {
+				// it's possible we're here because the inferred calculated value is 'none'
+				// this hard-wires the local display value to 'none'...just to be clear
+				VisibleEffectManager.finishHide(element);
+				return Promise.resolve(VisibleResult.NOOP);
+			} else if (values.currentState === VisibleState.SHOWING) {
+				fractionComplete = effect.computeFractionComplete(element);
+				AnimatingValues.cancelAnimation(element);
+			} else if (values.currentState === VisibleState.SHOWN) {
+				// handeled below with a fall-through
+			} else {
+				throw new Error('the provided value ' + values.currentState + ' is not supported');
+			}
+	
+			if (fractionComplete === null) {
+				fractionComplete = 1;
+			}
+	
+			global.assert(!AnimatingValues.isAnimating(element));
+	
+			let durationMS:number = effect.startHide(element, desiredDuration, effectTiming, fractionComplete);
+	
+			if (durationMS > 0) {
+				VisibleEffectManager.values.get(element).currentState = VisibleState.HIDING;
+				return AnimatingValues.scheduleCleanup(durationMS, element, effect.clearAnimation, VisibleEffectManager.finishHide);
+			} else {
+				VisibleEffectManager.finishHide(element);
+				global.assert(values.currentState == VisibleState.HIDDEN);
+				return Promise.resolve(VisibleResult.IMMEDIATE);
+			}
 		} else {
-			throw new Error('the provided value ' + values.currentState + ' is not supported');
-		}
-
-		if (fractionComplete === null) {
-			fractionComplete = 1;
-		}
-
-		global.assert(!AnimatingValues.isAnimating(element));
-
-		let durationMS:number = effect.startHide(element, desiredDuration, effectTiming, fractionComplete);
-
-		if (durationMS > 0) {
-			VisibleEffectManager.values[<any>element].currentState = VisibleState.HIDING;
-			return AnimatingValues.scheduleCleanup(durationMS, element, effect.clearAnimation, VisibleEffectManager.finishHide);
-		} else {
-			VisibleEffectManager.finishHide(element);
-			global.assert(values.currentState == VisibleState.HIDDEN);
 			return Promise.resolve(VisibleResult.IMMEDIATE);
 		}
 	}
@@ -294,7 +298,7 @@ export class VisibleEffectManager {
 	 * private
 	 */
 	static finishHide(element:HTMLElement):void {
-		let values:VisibleValues = VisibleEffectManager.values[<any>element];
+		let values:VisibleValues = VisibleEffectManager.values.get(element);
 
 		global.assert(!AnimatingValues.isAnimating(element));
 
@@ -307,7 +311,7 @@ export class VisibleEffectManager {
 	 * 
 	 */
 	static getShowDisplayValue(element:HTMLElement):string {
-		let values:VisibleValues = VisibleEffectManager.values[<any>element];
+		let values:VisibleValues = VisibleEffectManager.values.get(element);
 
 		if (values.initialComputedDisplay === 'none') {
 			// if the element was initially invisible, it's tough to know "why"
