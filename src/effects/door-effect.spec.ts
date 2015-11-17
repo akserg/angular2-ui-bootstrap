@@ -1,15 +1,15 @@
 import {describe, beforeEach, expect, it, fakeAsync, tick} from 'angular2/testing';
 
-import {SpinEffect} from './spin-effect';
+import {DoorEffect} from './door-effect';
 import {CssEffectTiming} from './css-effect-timing';
 
-describe('SpinEffect', () => {
+describe('DoorEffect', () => {
   let property;
   let timing;
   let cssTimingValue;
   let desiredDuration;
   let element:HTMLElement;
-  let spinEffect:SpinEffect;
+  let doorEffect:DoorEffect;
 
   beforeEach(() => {
     property = '-webkit-transform';
@@ -17,16 +17,16 @@ describe('SpinEffect', () => {
     cssTimingValue = CssEffectTiming.getCssValue(timing);
     desiredDuration = 50;
     element = document.createElement('div');
-    spinEffect = new SpinEffect();
+    doorEffect = new DoorEffect();
   });
 
   it('should be defined', () => {
-  	expect(spinEffect).toBeDefined();
+  	expect(doorEffect).toBeDefined();
   });
   
   it('should update style of element after call startShow', () => {
     fakeAsync(() => {
-      let actualDuration = spinEffect.startShow(element, desiredDuration, timing);
+      let actualDuration = doorEffect.startShow(element, desiredDuration, timing);
 
       expect(actualDuration).toBe(desiredDuration);
 
@@ -44,7 +44,7 @@ describe('SpinEffect', () => {
   
   it('should update style of element after call startHide', () => {
     fakeAsync(() => {
-      let actualDuration = spinEffect.startHide(element, desiredDuration, timing);
+      let actualDuration = doorEffect.startHide(element, desiredDuration, timing);
 
       expect(actualDuration).toBe(desiredDuration);
 
@@ -62,7 +62,7 @@ describe('SpinEffect', () => {
   
   it('should clean style of element after call clearAnimation', () => {
     fakeAsync(() => {
-      spinEffect.startShow(element, desiredDuration, timing);
+      doorEffect.startShow(element, desiredDuration, timing);
 
       tick(1);
 
@@ -70,7 +70,7 @@ describe('SpinEffect', () => {
       expect(element.style.transitionProperty).toBe(property);
       expect(element.style.transitionDuration).toBe(desiredDuration + 'ms');
 
-      spinEffect.clearAnimation(element);
+      doorEffect.clearAnimation(element);
 
       tick(1);
 
