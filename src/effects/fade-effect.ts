@@ -1,6 +1,5 @@
 import {CssTransitionEffect} from './css-transition-effect';
 
-
 export class FadeEffect extends CssTransitionEffect {
   private static property:string = 'opacity';
   

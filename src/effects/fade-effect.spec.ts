@@ -3,7 +3,7 @@ import {describe, beforeEach, expect, it, fakeAsync, tick} from 'angular2/testin
 import {FadeEffect} from './fade-effect';
 import {CssEffectTiming} from './css-effect-timing';
 
-describe('CssTransitionEffect', () => {
+describe('FadeEffect', () => {
   let property;
   let timing;
   let cssTimingValue;
