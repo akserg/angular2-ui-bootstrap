@@ -1,15 +1,16 @@
 import {describe, beforeEach, expect, it, fakeAsync, tick} from 'angular2/testing';
 
-import {ShrinkHeightEffect, ShrinkWidthEffect} from './shrink-effect';
+import {ShrinkEffect} from './shrink-effect';
 import {CssEffectTiming} from './css-effect-timing';
+import {Orientation} from '../utils/alignment';
 
-describe('ShrinkHeightEffect', () => {
+describe('Vertical ShrinkEffect', () => {
   let property;
   let timing;
   let cssTimingValue;
   let desiredDuration;
   let element:HTMLElement;
-  let shrinkHeightEffect:ShrinkHeightEffect;
+  let shrinkEffect:ShrinkEffect;
 
   beforeEach(() => {
     property = 'max-height';
@@ -17,16 +18,16 @@ describe('ShrinkHeightEffect', () => {
     cssTimingValue = CssEffectTiming.getCssValue(timing);
     desiredDuration = 50;
     element = document.createElement('div');
-    shrinkHeightEffect = new ShrinkHeightEffect();
+    shrinkEffect = new ShrinkEffect(Orientation.VERTICAL);
   });
 
   it('should be defined', () => {
-  	expect(shrinkHeightEffect).toBeDefined();
+  	expect(shrinkEffect).toBeDefined();
   });
   
   it('should update style of element after call startShow', () => {
     fakeAsync(() => {
-      let actualDuration = shrinkHeightEffect.startShow(element, desiredDuration, timing);
+      let actualDuration = shrinkEffect.startShow(element, desiredDuration, timing);
 
       expect(actualDuration).toBe(desiredDuration);
 
@@ -44,7 +45,7 @@ describe('ShrinkHeightEffect', () => {
   
   it('should update style of element after call startHide', () => {
     fakeAsync(() => {
-      let actualDuration = shrinkHeightEffect.startHide(element, desiredDuration, timing);
+      let actualDuration = shrinkEffect.startHide(element, desiredDuration, timing);
 
       expect(actualDuration).toBe(desiredDuration);
 
@@ -62,7 +63,7 @@ describe('ShrinkHeightEffect', () => {
   
   it('should clean style of element after call clearAnimation', () => {
     fakeAsync(() => {
-      shrinkHeightEffect.startShow(element, desiredDuration, timing);
+      shrinkEffect.startShow(element, desiredDuration, timing);
 
       tick(1);
 
@@ -70,7 +71,7 @@ describe('ShrinkHeightEffect', () => {
       expect(element.style.transitionProperty).toBe(property);
       expect(element.style.transitionDuration).toBe(desiredDuration + 'ms');
 
-      shrinkHeightEffect.clearAnimation(element);
+      shrinkEffect.clearAnimation(element);
 
       tick(1);
 
@@ -81,13 +82,13 @@ describe('ShrinkHeightEffect', () => {
   });
 });
 
-describe('ShrinkWidthEffect', () => {
+describe('Horizontal ShrinkEffect', () => {
   let property;
   let timing;
   let cssTimingValue;
   let desiredDuration;
   let element:HTMLElement;
-  let shrinkWidthEffect:ShrinkWidthEffect;
+  let shrinkEffect:ShrinkEffect;
 
   beforeEach(() => {
     property = 'max-width';
@@ -95,16 +96,16 @@ describe('ShrinkWidthEffect', () => {
     cssTimingValue = CssEffectTiming.getCssValue(timing);
     desiredDuration = 50;
     element = document.createElement('div');
-    shrinkWidthEffect = new ShrinkWidthEffect();
+    shrinkEffect = new ShrinkEffect(Orientation.HORIZONTAL);
   });
 
   it('should be defined', () => {
-  	expect(shrinkWidthEffect).toBeDefined();
+  	expect(shrinkEffect).toBeDefined();
   });
   
   it('should update style of element after call startShow', () => {
     fakeAsync(() => {
-      let actualDuration = shrinkWidthEffect.startShow(element, desiredDuration, timing);
+      let actualDuration = shrinkEffect.startShow(element, desiredDuration, timing);
 
       expect(actualDuration).toBe(desiredDuration);
 
@@ -122,7 +123,7 @@ describe('ShrinkWidthEffect', () => {
   
   it('should update style of element after call startHide', () => {
     fakeAsync(() => {
-      let actualDuration = shrinkWidthEffect.startHide(element, desiredDuration, timing);
+      let actualDuration = shrinkEffect.startHide(element, desiredDuration, timing);
 
       expect(actualDuration).toBe(desiredDuration);
 
@@ -140,7 +141,7 @@ describe('ShrinkWidthEffect', () => {
   
   it('should clean style of element after call clearAnimation', () => {
     fakeAsync(() => {
-      shrinkWidthEffect.startShow(element, desiredDuration, timing);
+      shrinkEffect.startShow(element, desiredDuration, timing);
 
       tick(1);
 
@@ -148,7 +149,7 @@ describe('ShrinkWidthEffect', () => {
       expect(element.style.transitionProperty).toBe(property);
       expect(element.style.transitionDuration).toBe(desiredDuration + 'ms');
 
-      shrinkWidthEffect.clearAnimation(element);
+      shrinkEffect.clearAnimation(element);
 
       tick(1);
 
