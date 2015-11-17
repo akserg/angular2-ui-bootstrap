@@ -126,7 +126,7 @@ describe('VisibleEffectManager', () => {
         expect(element.style.display).toBe('none');
         expect(result).toBeDefined(VisibleResult.ANIMATED);
       });
-      tick(250);
+      tick(VisibleEffectManager.defaultDuration);
     })(); 
   });
   
@@ -136,7 +136,7 @@ describe('VisibleEffectManager', () => {
         expect(element.style.display).toBe('');
         expect(result).toBeDefined(VisibleResult.ANIMATED);
       });
-      tick(250);
+      tick(VisibleEffectManager.defaultDuration);
     })(); 
   });
   
@@ -149,9 +149,9 @@ describe('VisibleEffectManager', () => {
           expect(element.style.display).toBe('');
           expect(result).toBeDefined(VisibleResult.ANIMATED);
         });
-        tick(250);
+        tick(VisibleEffectManager.defaultDuration);
       });
-      tick(250);
+      tick(VisibleEffectManager.defaultDuration);
     })(); 
   });
 });

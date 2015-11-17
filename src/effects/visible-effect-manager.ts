@@ -53,7 +53,7 @@ class VisibleValues {
 @Injectable()
 export class VisibleEffectManager {
 
-	private static defaultDuration:number = 250;
+	static defaultDuration:number = 250;
 	private static defaultDisplays:Map<string, string> = new Map<string, string>();
 	static values:WeakMap<HTMLElement, VisibleValues> = new WeakMap<HTMLElement, VisibleValues>();
 
