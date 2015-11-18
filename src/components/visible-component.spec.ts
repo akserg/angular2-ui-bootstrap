@@ -1,7 +1,4 @@
-import {
-  describe,
-  expect
-} from 'angular2/testing';
+import {describe, expect, beforeEach, it} from 'angular2/testing';
 
 import {VisibleComponent, VisibleEvent} from './visible-component';
 
