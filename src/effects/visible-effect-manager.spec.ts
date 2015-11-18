@@ -1,6 +1,10 @@
 import {describe, beforeEach, expect, it, fakeAsync, tick, flushMicrotasks} from 'angular2/testing';
 
-import {VisibleEffectManager, VisibleState, VisibleResult, VisibleAction, AnimatingValues} from './visible-effect-manager';
+import {VisibleEffectManager} from './visible-effect-manager';
+import {VisibleAction} from './visible-action';
+import {VisibleResult} from './visible-result';
+import {VisibleState} from './visible-state';
+import {AnimatingValues} from './animating-values';
 import {VisibleEffect} from './visible-effect';
 import {CssTransitionEffect} from './css-transition-effect';
 import {CssEffectTiming} from './css-effect-timing';

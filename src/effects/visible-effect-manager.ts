@@ -1,54 +1,15 @@
 import {Injectable} from 'angular2/angular2';
 import {global} from 'angular2/src/core/facade/lang';
-import {PromiseCompleter, PromiseWrapper} from 'angular2/src/core/facade/promise';
-import {TimerWrapper} from 'angular2/src/core/facade/async';
 
-import {Enum} from '../utils/enum';
 import {Dom} from '../utils/dom';
 
+import {VisibleAction} from './visible-action';
+import {VisibleResult} from './visible-result';
+import {VisibleState} from './visible-state';
+import {VisibleValues} from './visible-values';
+import {AnimatingValues} from './animating-values';
 import {VisibleEffect} from './visible-effect';
 import {CssEffectTiming} from './css-effect-timing';
-
-export class VisibleAction extends Enum {
-	static SHOW:VisibleAction = new VisibleAction('show');
-	static HIDE:VisibleAction = new VisibleAction('hide');
-	static TOGGLE:VisibleAction = new VisibleAction('toggle');
-}
-
-export class VisibleResult extends Enum {
-	static ANIMATED:VisibleResult = new VisibleResult('animated');
-	static NOOP:VisibleResult = new VisibleResult('no-op');
-	static IMMEDIATE:VisibleResult = new VisibleResult('immediate');
-	static CANCELED:VisibleResult = new VisibleResult('canceled');
-
-	get isSuccess():boolean {
-		return this !== VisibleResult.CANCELED;
-	}
-}
-
-export class VisibleState extends Enum {
-	static SHOWN:VisibleState = new VisibleState('shown');
-	static HIDDEN:VisibleState = new VisibleState('hidden');
-	static SHOWING:VisibleState = new VisibleState('showing');
-	static HIDING:VisibleState = new VisibleState('hidding');
-
-	static byName(name:string):VisibleState {
-		//return $([SHOWN, HIDDEN, SHOWING, HIDING]).singleWhere((shs) => shs.cssName == name);
-		return null;
-	}
-
-	get isFinished():boolean {
-		return this === VisibleState.HIDDEN || this === VisibleState.SHOWN;
-	}
-
-	get isShow():boolean {
-		return this === VisibleState.SHOWN || this === VisibleState.SHOWING;
-	};
-}
-
-class VisibleValues {
-  	constructor(public initialComputedDisplay:string, public initialLocalDisplay:string, public currentState:VisibleState) {}
-}
 
 @Injectable()
 export class VisibleEffectManager {
@@ -332,87 +293,4 @@ export class VisibleEffectManager {
 			}
 		}
 	}
-}
-
-/**
- * Animation Values class helps to check current animation state and could runs cancel or cleanup operations.
- */
-export class AnimatingValues {
-  private static animatingValues:WeakMap<HTMLElement, AnimatingValues> = new WeakMap<HTMLElement, AnimatingValues>();
-
-  private completer:PromiseCompleter<VisibleResult> = PromiseWrapper.completer();
-
-  private timer:any;
-
-  constructor(private element:HTMLElement, private cleanupFunction:Function, private finishFunction:Function) {
-    global.assert(AnimatingValues.animatingValues.get(this.element));
-    AnimatingValues.animatingValues.set(this.element, this);
-  }
-
-  /**
-   * Check does any animation happens on an element.
-   */
-  static isAnimating(element:HTMLElement):boolean {
-    let values:AnimatingValues = AnimatingValues.animatingValues.get(element);
-    return values != null;
-  }
-
-  /**
-   * Cancel current animation on an element.
-   */
-  static cancelAnimation(element:HTMLElement):void {
-    let values:AnimatingValues = AnimatingValues.animatingValues.get(element);
-    global.assert(values);
-    values.cancel();
-  }
-
-  /**
-   * Run clean up operation later.
-   */
-  static scheduleCleanup(durationMS:number, element:HTMLElement, cleanupFunction:Function, finishFunction:Function):Promise<VisibleResult> {
-    let value:AnimatingValues = new AnimatingValues(element, cleanupFunction, finishFunction);
-    return value.start(durationMS);
-  }
-
-  /**
-   * Run animation after specified amount of time. This method returns the Promise of animation operation.
-   */
-  private start(durationMS:number):Promise<VisibleResult> {
-    global.assert(durationMS > 0);
-    global.assert(this.timer);
-
-    this.timer = TimerWrapper.setTimeout(() => {
-		this.complete();
-	}, durationMS);
-    return this.completer.promise;
-  }
-
-  /**
-   * Stop execution of an animation, clean up and inform all listeneres of Promise of animation operation that operation was VisibleResult.CANCELED.
-   */
-  private cancel():void {
-    global.assert(this.timer);
-    TimerWrapper.clearTimeout(this.timer); 
-	this.timer = null;
-    this.cleanup();
-    this.completer.resolve(VisibleResult.CANCELED);
-  }
-
-  /**
-   * Complete animation and inform all listeneres of Promise of animation operation that operation was VisibleResult.ANIMATED.
-   */
-  private complete():void {
-    this.cleanup();
-    this.finishFunction(this.element);
-    this.completer.resolve(VisibleResult.ANIMATED);
-  }
-
-  /**
-   * Clean up after canceletion or completion of animation operation.
-   */
-  private cleanup():void {
-    global.assert(AnimatingValues.animatingValues.get(this.element));
-    this.cleanupFunction(this.element);
-    AnimatingValues.animatingValues.set(this.element, null);
-  }
 }
