@@ -1,1 +1,2 @@
-export const ANGULAR2_DIRECTIVES = [];
+export * from  './components/visible-component';
+export * from  './components/collapsible-component';
