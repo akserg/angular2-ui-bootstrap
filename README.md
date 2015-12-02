@@ -1,5 +1,5 @@
-# Angular2 UI Bootstrap
-There are Angular2 Components for Bootstrap.
+# Angular 2 UI Bootstrap
+There are Angular 2 Components for Bootstrap.
 
 [![Code Climate](https://codeclimate.com/github/akserg/angular2-ui-bootstrap/badges/gpa.svg)](https://codeclimate.com/github/akserg/angular2-ui-bootstrap)
 [![Dependency Status](https://david-dm.org/akserg/angular2-ui-bootstrap.svg)](https://david-dm.org/akserg/angular2-ui-bootstrap)
