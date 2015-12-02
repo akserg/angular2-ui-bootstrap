@@ -1,6 +1,6 @@
 {
   "name": "angular2-ui-bootstrap",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Angular 2 Components for Bootstrap",
   "scripts": {
     "build.dev": "gulp build.dev",
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/akserg/angular2-ui-bootstrap#readme",
   "devDependencies": {
-    "angular2": "^2.0.0-alpha.45",
+    "angular2": "^2.0.0-alpha.47",
     "del": "^2.0.2",
     "es6-shim": "^0.33.8",
     "gulp": "^3.9.0",

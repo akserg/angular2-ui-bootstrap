@@ -3,7 +3,7 @@ import {Injectable, EventEmitter, Output} from 'angular2/angular2';
 export class VisibleEvent {
 	static SHOWN:VisibleEvent = new VisibleEvent('shown');
 	static HIDDEN:VisibleEvent = new VisibleEvent('hidden');
-	
+
 	constructor(public type:string) {}
 }
 
@@ -12,18 +12,18 @@ export class VisibleEvent {
  */
 @Injectable()
 export class VisibleComponent {
-	@Output('visibleEvent') visibleEvent:EventEmitter = new EventEmitter();
-	
+	@Output('visibleEvent') visibleEvent:EventEmitter<string> = new EventEmitter();
+
 	private _isShown: boolean;
-	
+
 	constructor() {
 		this._isShown = false;
 	}
-	
+
 	get isShown():boolean {
 		return this._isShown;
 	}
-	
+
 	set isShown(value:boolean) {
 		value = !!value;
 		if (value !== this._isShown) {

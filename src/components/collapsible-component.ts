@@ -1,6 +1,6 @@
 import {Directive, ElementRef} from 'angular2/angular2';
 import {HostBinding, HostListener} from 'angular2/core';
-import {PromiseCompleter, PromiseWrapper} from 'angular2/src/core/facade/promise';
+import {PromiseCompleter, PromiseWrapper} from 'angular2/src/facade/promise';
 
 import {VisibleComponent} from './visible-component';
 import {VisibleEffect} from '../effects/visible-effect';

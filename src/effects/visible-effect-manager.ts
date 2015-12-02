@@ -1,5 +1,5 @@
 import {Injectable} from 'angular2/angular2';
-import {global} from 'angular2/src/core/facade/lang';
+import {global} from 'angular2/src/facade/lang';
 
 import {Dom} from '../utils/dom';
 
@@ -215,7 +215,7 @@ export class VisibleEffectManager {
 		let values = VisibleEffectManager.values.get(element);
 		if (values) {
 			let fractionComplete:number = null;
-	
+
 			if (values.currentState === VisibleState.HIDING) {
 				// no op - let the current animation finish
 				global.assert(AnimatingValues.isAnimating(element));
@@ -233,15 +233,15 @@ export class VisibleEffectManager {
 			} else {
 				throw new Error('the provided value ' + values.currentState + ' is not supported');
 			}
-	
+
 			if (fractionComplete === null) {
 				fractionComplete = 1;
 			}
-	
+
 			global.assert(!AnimatingValues.isAnimating(element));
-	
+
 			let durationMS:number = effect.startHide(element, desiredDuration, effectTiming, fractionComplete);
-	
+
 			if (durationMS > 0) {
 				VisibleEffectManager.values.get(element).currentState = VisibleState.HIDING;
 				return AnimatingValues.scheduleCleanup(durationMS, element, effect.clearAnimation, VisibleEffectManager.finishHide);
@@ -269,7 +269,7 @@ export class VisibleEffectManager {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	static getShowDisplayValue(element:HTMLElement):string {
 		let values:VisibleValues = VisibleEffectManager.values.get(element);

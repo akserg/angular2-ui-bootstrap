@@ -1,7 +1,7 @@
-import {global} from 'angular2/src/core/facade/lang';
+import {global} from 'angular2/src/facade/lang';
 
-import {PromiseCompleter, PromiseWrapper} from 'angular2/src/core/facade/promise';
-import {TimerWrapper} from 'angular2/src/core/facade/async';
+import {PromiseCompleter, PromiseWrapper} from 'angular2/src/facade/promise';
+import {TimerWrapper} from 'angular2/src/facade/async';
 
 import {VisibleResult} from './visible-result';
 
@@ -63,7 +63,7 @@ export class AnimatingValues {
    */
   private cancel():void {
     global.assert(this.timer);
-    TimerWrapper.clearTimeout(this.timer); 
+    TimerWrapper.clearTimeout(this.timer);
 	this.timer = null;
     this.cleanup();
     this.completer.resolve(VisibleResult.CANCELED);

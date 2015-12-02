@@ -1,4 +1,4 @@
-import {global} from 'angular2/src/core/facade/lang';
+import {global} from 'angular2/src/facade/lang';
 
 export class Dom {
 	private static _elemDisplay:Map<string, string> = new Map<string, string>();

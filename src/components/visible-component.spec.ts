@@ -28,7 +28,7 @@ describe('VisibleComponent', () => {
   });
 
   it ('should change internal state when show method called', () => {
-    visibleComponent.visibleEvent.toRx().subscribe((event:VisibleEvent) => {
+    visibleComponent.visibleEvent.subscribe((event:VisibleEvent) => {
       expect(event).toBe(VisibleEvent.SHOWN);
     });
 
@@ -38,7 +38,7 @@ describe('VisibleComponent', () => {
   it ('should change internal state when hide method called', () => {
     visibleComponent.show();
 
-    visibleComponent.visibleEvent.toRx().subscribe((event:VisibleEvent) => {
+    visibleComponent.visibleEvent.subscribe((event:VisibleEvent) => {
       expect(event).toBe(VisibleEvent.HIDDEN);
     });
 
@@ -48,7 +48,7 @@ describe('VisibleComponent', () => {
   it ('should change internal state when toggle method called', () => {
     visibleComponent.show();
 
-    visibleComponent.visibleEvent.toRx().subscribe((event:VisibleEvent) => {
+    visibleComponent.visibleEvent.subscribe((event:VisibleEvent) => {
       expect(event).toBe(VisibleEvent.HIDDEN);
     });
 

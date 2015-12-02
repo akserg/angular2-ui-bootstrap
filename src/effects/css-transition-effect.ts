@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/angular2';
 
-import {global} from 'angular2/src/core/facade/lang';
-import {TimerWrapper} from 'angular2/src/core/facade/async';
+import {global} from 'angular2/src/facade/lang';
+import {TimerWrapper} from 'angular2/src/facade/async';
 
 import {VisibleEffect} from './visible-effect';
 import {CssEffectTiming} from './css-effect-timing';
