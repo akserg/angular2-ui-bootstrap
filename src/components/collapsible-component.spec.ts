@@ -6,37 +6,12 @@ import {VisibleAction} from '../effects/visible-action';
 
 describe('CollapsibleComponent', () => {
 
-  // let collapsibleComponent:CollapsibleComponent;
-  // let element:HTMLElement;
-
-  // beforeEach(() => {
-  //   element = document.createElement('div');
-  //   let el:ElementRef = {
-  //     nativeElement: element,
-  //     renderView: null
-  //   };
-  //   collapsibleComponent = new CollapsibleComponent(el);
-  // });
+  let template:string = '<div><div uia-collapse="isCollapsed"><div class="well well-lg">Some content</div></div></div>';
   let tcb: TestComponentBuilder;
 
   beforeEach(inject([TestComponentBuilder], (_tcb: TestComponentBuilder) => {
     tcb = _tcb;
   }));
-
-  // it('should be fine', () => {
-  // 	expect(collapsibleComponent).toBeDefined();
-  // });
-
-  // playground(tcb: TestComponentBuilder):Primise<RootTestComponent> {
-  //   return null;
-    // return tcb.overrideTemplate(TestComponent, '<div><div uia-collapse="isCollapsed"><div class="well well-lg">Some content</div></div></div>')
-    //   .createAsync(TestComponent)
-    //   .then((rootTC:RootTestComponent) => {
-    //     rootTC.detectChanges();
-    //     return rootTC;
-    //   }));
-  // }
-  let template:string = '<div><div uia-collapse="isCollapsed"><div class="well well-lg">Some content</div></div></div>';
 
   function playground(tcb: TestComponentBuilder):Promise<RootTestComponent> {
     return tcb.overrideTemplate(TestComponent, template)
